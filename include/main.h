@@ -8,28 +8,46 @@
 #include <Arduino.h>
 
 /**
- * @brief   <br><p>TM7711 SCK 所连接的 Arduino Nano 的引脚</p>
- * <p>The pin of Arduino Nano connected by SCK of TM7711</p>
+ * @brief   <br><p>模拟输入引脚</p>
+ * <p>Analog Input Pin</p>
  * @author  A-KRY
- * @date    2023/10/29 14:03
+ * @date    2023/11/1 14:06
  */
-#define SENSOR_SCK PD2
+#define ANALOG_IN A7
 
 /**
- * @brief   <br><p>TM7711 DOUT 所连接的 Arduino Nano 的引脚</p>
- * <p>The pin of Arduino Nano connected by DOUT of TM7711</p>
+ * @brief   <br><p>最小 ADC 值</p>
+ * <p>Minimum ADC value</p>
  * @author  A-KRY
- * @date    2023/10/29 14:03
+ * @date    2023/11/1 20:39
  */
-#define SENSOR_OUT PD3
+#define ADC_MIN 32.0f
 
 /**
- * @brief   <br><p>当 TM7711 转化完成时，DOUT 降至 LOW</p>
- * <p>When conversion of TM7711 finished, DOUT drops to LOW.</p>
+ * @brief   <br><p>最大 ADC 值</p>
+ * <p>Maximum ADC value</p>
  * @author  A-KRY
- * @date    2023/10/29 13:59
+ * @date    2023/11/1 20:40
  */
-void onConvertFinished();
+#define ADC_MAX 80.0f
+
+/**
+ * @brief   <br><p>ADC 区间长度</p>
+ * <p>Length of ADC range.</p>
+ * @author  A-KRY
+ * @date    2023/11/1 20:47
+ */
+#define ADC_LEN (ADC_MAX-ADC_MIN)
+
+/**
+ * @brief   <br><p>MIDI CC 取值区间长度</p>
+ * <p>Length of MIDI CC range.</p>
+ * @author  A-KRY
+ * @date    2023/11/1 20:52
+ */
+#define CC_LEN 127.0f
+
+#define CC_MAX CC_LEN
 
 /**
  * @brief   <br><p>发送 MIDI CC 的值</p>
@@ -39,66 +57,16 @@ void onConvertFinished();
  * @author  A-KRY
  * @date    2023/10/29 14:05
  */
- void sendDataTask();
+void sendDataTask();
 
-/**
-* @brief   <br><p>sendDataTask 的任务标志</p>
-* <p>Flag for sendDataTask</p>
-* @author  A-KRY
-* @date    2023/10/29 14:06
-*/
-bool sendDataFlag = false;
-
-/**
- * @brief   <br><p>读取 TM7711 的值</p>
- * <p>Read value from TM7711</p>
- * @param   
- * @return  <br><p>ADC</p>
- * @author  A-KRY
- * @date    2023/10/29 14:14
- */
-uint32_t readSensorData();
-
-/**
- * @brief   <br><p>TM7711 数据长度</p>
- * <p>Data length of TM7711.</p>
- * @author  A-KRY
- * @date    2023/10/29 16:29
- */
-#define SENSOR_DATA_LENGTH 24
-
-/**
- * @brief   <br><p>TM7711 <b>差分信号-10Hz</b> 模式所追加的 SCK 脉冲数</p>
- * <p>Number of SCK pulses to append in <<b>Differential Signal-10Hz</b> mode.</p>
- * @author  A-KRY
- * @date    2023/10/29 16:35
- */
-#define CH1_10HZ_APPEND 1
-
-/**
- * @brief   <br><p>TM7711 <b>差分信号-40Hz</b> 模式所追加的 SCK 脉冲数</p>
- * <p>Number of SCK pulses to append in <<b>Differential Signal-40Hz</b> mode.</p>
- * @author  A-KRY
- * @date    2023/10/29 16:32
- */
-#define CH1_40HZ_APPEND 3
-
-#define SCK_HIGH digitalWrite(SENSOR_SCK, HIGH);
-#define SCK_LOW digitalWrite(SENSOR_SCK, LOW);
-#define SCK_DELAY delayMicroseconds(1);
-
-/**
- * @brief   <br><p>从 24 位补码获取 32 位无符号数</p>
- * <p>Get unsigned 32-bit from 24-bit complement</p>
- * @warning <p>VAL 必须为 32 位整型</p>
- * <p>VAL must be a 32-bit integer.</p>
- * @author  A-KRY
- * @date    2023/10/29 14:41
- */
-#define C24_TO_U32(VAL) \
-    if (((VAL)>>23)&0x1) {                                                                                                \
-        VAL |= 0xFF000000;                                                                                                \
-    }                                                                                                                     \
-    VAL += 1UL<<23;
+ /**
+  * @brief   <br><p>标准化 ADC 输出至 MIDI CC 范围</p>
+  * <p>Standardize ADC output to MIDI CC range.</p>
+  * @param
+  * @return
+  * @author  A-KRY
+  * @date    2023/11/1 20:45
+  */
+uint8_t getNext();
 
 #endif //NANOBREATHCONTROLLER_FIRMWARE_MAIN_H
