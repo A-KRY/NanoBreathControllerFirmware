@@ -8,28 +8,28 @@
 #include <Arduino.h>
 
 /**
- * @brief   <br><p>模拟输入引脚</p>
- * <p>Analog Input Pin</p>
+ * @brief   <br><p>模拟输入引脚。根据您开发板的连线来修改。</p>
+ * <p>Analog Input Pin. Modify according to your board connection.</p>
  * @author  A-KRY
  * @date    2023/11/1 14:06
  */
 #define ANALOG_IN A7
 
 /**
- * @brief   <br><p>最小 ADC 值</p>
- * <p>Minimum ADC value</p>
+ * @brief   <br><p>最小 ADC 值。根据您传感器的情况来修改。</p>
+ * <p>Minimum ADC value. Modify according to the situation of your sensor.</p>
  * @author  A-KRY
  * @date    2023/11/1 20:39
  */
 #define ADC_MIN 32.0f
 
 /**
- * @brief   <br><p>最大 ADC 值</p>
- * <p>Maximum ADC value</p>
+ * @brief   <br><p>最大 ADC 值。根据您传感器的情况来修改。</p>
+ * <p>Maximum ADC value. Modify according to the situation of your sensor.</p>
  * @author  A-KRY
  * @date    2023/11/1 20:40
  */
-#define ADC_MAX 80.0f
+#define ADC_MAX 65.0f
 
 /**
  * @brief   <br><p>ADC 区间长度</p>
@@ -68,5 +68,15 @@ void sendDataTask();
   * @date    2023/11/1 20:45
   */
 uint8_t getNext();
+
+/**
+ * @brief   <br><p>映射，使得通过较小的力可以吹出较大的 CC 值</p>
+ * <p>Mapping to allow for smaller forces to produce higher CC values.</p>
+ * @param   normalized Normalized value.
+ * @return  Mapped value in range [0,1].
+ * @author  A-KRY
+ * @date    2023/11/2 10:21
+ */
+float mapper(float normalized);
 
 #endif //NANOBREATHCONTROLLER_FIRMWARE_MAIN_H
