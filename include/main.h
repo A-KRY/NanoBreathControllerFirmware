@@ -70,8 +70,10 @@ void sendDataTask();
 uint8_t getNext();
 
 /**
- * @brief   <br><p>映射，使得通过较小的力可以吹出较大的 CC 值</p>
- * <p>Mapping to allow for smaller forces to produce higher CC values.</p>
+ * @brief   <br><p>承担力度曲线的功能</p>
+ * <p>This function implements the force curve.</p>
+ * @attention <p>对于 [0,1] 内的自变量，返回值必须属于 [0,1]</p>
+ * <p>For input values within [0,1], the return value must belong to [0,1].</p>
  * @param   normalized Normalized value.
  * @return  Mapped value in range [0,1].
  * @author  A-KRY

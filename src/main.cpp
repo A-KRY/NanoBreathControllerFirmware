@@ -31,7 +31,9 @@ void sendDataTask() {
 }
 
 uint8_t getNext() {
-    float normalized = (analogRead(ANALOG_IN) - ADC_MIN) / ADC_LEN;
+    static float normalized;
+
+    normalized = (analogRead(ANALOG_IN) - ADC_MIN) / ADC_LEN;
 
     if (normalized < 0.0f) {
         return 0;
